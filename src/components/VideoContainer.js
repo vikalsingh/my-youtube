@@ -1,35 +1,31 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+import { YOUTUBE_VIDEOS_API } from "../utils/contants";
+import VideoCard, { AdVideoCard } from "./VideoCard";
+import { Link } from "react-router-dom";
 
 const VideoContainer = () => {
-    const [searchText, setSearchText] = useState('');
+  const [videos, setVideos] = useState([]);
 
-    useEffect(() => {
+  useEffect(() => {
+    getVideos();
+  }, []);
 
-        const timer = setTimeout(() => callTheApi(), 200);
+  const getVideos = async () => {
+    const data = await fetch(YOUTUBE_VIDEOS_API);
+    const json = await data.json();
+    setVideos(json.items);
+  };
 
-        return () => {
-            clearTimeout(timer);
-        }
-
-    }, [searchText]);
-
-    return(
-        <div className="flex">
-        <Hoc />
-            <div className="bg-red-400 w-14 h-12 m-4"></div>
-            <div className="bg-red-400 w-14 h-12 m-4"></div>
-            <div className="bg-red-400 w-14 h-12 m-4"></div>
-            <div className="bg-red-400 w-14 h-12 m-4"></div>
-        </div>
-    );
-};
-
-export const Hoc = (VideoContainer) => {
-    return (
-        <div className="border-green-500">
-            <VideoContainer />
-        </div>
-    );
+  return (
+    <div className="flex flex-wrap">
+      {/* {videos[0] && <AdVideoCard info={videos[0]} />}
+      {videos && videos.map((video) => (
+        <Link key={video?.id} to={"/watch?v=" + video?.id}>
+          <VideoCard info={video} />
+        </Link>
+      ))} */}
+    </div>
+  );
 };
 
 export default VideoContainer;
